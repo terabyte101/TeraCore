@@ -1,0 +1,10 @@
+= TeraCore -- information =
+
+Copyright (C) TeraCore (No Website yet)
+
+
+TeraCore is a MMORPG Framework based mostly on C++. It is completely 
+open source, and is community supported. It is derived
+from Trinitycore
+
+SQL files to create the database can be found in the sql directory.
