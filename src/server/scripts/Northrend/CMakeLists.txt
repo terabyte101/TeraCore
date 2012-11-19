@@ -54,6 +54,7 @@ set(scripts_STAT_SRCS
   Northrend/ChamberOfAspects/RubySanctum/boss_halion.cpp
   Northrend/FrozenHalls/HallsOfReflection/halls_of_reflection.h
   Northrend/FrozenHalls/HallsOfReflection/boss_falric.cpp
+  Northrend/FrozenHalls/HallsOfReflection/boss_the_lich_king_hor.cpp
   Northrend/FrozenHalls/HallsOfReflection/instance_halls_of_reflection.cpp
   Northrend/FrozenHalls/HallsOfReflection/halls_of_reflection.cpp
   Northrend/FrozenHalls/HallsOfReflection/boss_marwyn.cpp
