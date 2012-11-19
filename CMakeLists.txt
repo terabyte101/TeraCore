@@ -8,8 +8,14 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+# Need to pass old ${CMAKE_BINARY_DIR} as param because its different at build stage
+add_custom_target(revision.h ALL
+  COMMAND ${CMAKE_COMMAND} -DBUILDDIR=${CMAKE_BINARY_DIR} -P ${CMAKE_SOURCE_DIR}/cmake/genrev.cmake
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Set projectname (must be done AFTER setting configurationtypes)
-project(TrinityCore)
+project(TeraCore)
 
 # CMake policies (can not be handled elsewhere)
 cmake_minimum_required(VERSION 2.6)
@@ -65,6 +71,9 @@ include(cmake/showoptions.cmake)
 
 # add dependencies
 add_subdirectory(dep)
+
+# add dependencies
+add_subdirectory(tools)
 
 # add core sources
 add_subdirectory(src)
