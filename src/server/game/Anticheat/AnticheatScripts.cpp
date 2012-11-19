@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation; either version 2 of the License, or (at your
@@ -15,39 +13,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TRINITY_AUTO_PTR_H
-#define _TRINITY_AUTO_PTR_H
+#include "AnticheatScripts.h"
+#include "AnticheatMgr.h"
 
-#include <ace/Bound_Ptr.h>
+AnticheatScripts::AnticheatScripts(): PlayerScript("AnticheatScripts") {}
 
-namespace Trinity
+void AnticheatScripts::OnLogout(Player* player)
 {
+    sAnticheatMgr->HandlePlayerLogout(player);
+}
 
-template <class Pointer, class Lock>
-class AutoPtr : public ACE_Strong_Bound_Ptr<Pointer, Lock>
+void AnticheatScripts::OnLogin(Player* player)
 {
-    typedef ACE_Strong_Bound_Ptr<Pointer, Lock> Base;
-
-public:
-    AutoPtr()
-        : Base()
-    { }
-
-    AutoPtr(Pointer* x)
-        : Base(x)
-    { }
-
-    operator bool() const
-    {
-        return !Base::null();
-    }
-
-    bool operator !() const
-    {
-        return Base::null();
-    }
-};
-
-} // namespace TeraCore
-
-#endif
+    sAnticheatMgr->HandlePlayerLogin(player);
+}
