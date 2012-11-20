@@ -1,0 +1,16 @@
+***************
+*** 33,38 ****
+  #include "InstanceScript.h"
+  #include "Group.h"
+  #include "LFGMgr.h"
+  
+  class spell_gen_absorb0_hitlimit1 : public SpellScriptLoader
+  {
+--- 33,39 ----
+  #include "InstanceScript.h"
+  #include "Group.h"
+  #include "LFGMgr.h"
++ #include "Vehicle.h"
+  
+  class spell_gen_absorb0_hitlimit1 : public SpellScriptLoader
+  {
