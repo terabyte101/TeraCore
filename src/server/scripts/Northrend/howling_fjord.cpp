@@ -430,6 +430,109 @@ public:
     }
 };
 
+/*############
+# Quest 11472
+#############*/
+
+enum AttractedReefBullData
+{
+    NPC_FEMALE_REEF_COW = 24797,
+    SPELL_ANUNIAQS_NET = 21014,
+    SPELL_TASTY_REEF_FISH = 44454,
+    SPELL_LOVE_COSMETIC = 52148,
+    ITEM_TASTY_REEF_FISH = 34127,
+    QUEST_THE_WAY_TO_HIS_HEART = 11472
+};
+
+class npc_attracted_reef_bull : public CreatureScript
+{
+    public:
+
+        npc_attracted_reef_bull() : CreatureScript("npc_attracted_reef_bull") {}
+
+        struct npc_attracted_reef_bullAI : public ScriptedAI
+        {
+            npc_attracted_reef_bullAI(Creature* creature) : ScriptedAI(creature) {}
+
+            uint64 playerGUID;
+            uint8 point;
+
+            void Reset()
+            {
+                playerGUID = 0;
+                point = 0;
+            }
+
+            void UpdateAI(const uint32 /*diff*/) {}
+
+            void SpellHit(Unit* caster, const SpellInfo* spell)
+            {
+                if (!caster->ToPlayer())
+                    return;
+
+                if (spell->Id == SPELL_TASTY_REEF_FISH)
+                {
+                    if (playerGUID == 0)
+                        playerGUID = caster->GetGUID();
+
+                    me->GetMotionMaster()->MovePoint(point, caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ());
+                    ++point;
+                }
+
+                if (Creature* female = me->FindNearestCreature(NPC_FEMALE_REEF_COW, 5.0f, true))
+                {
+                    if (Player* player = me->GetPlayer(*me, playerGUID))
+                    {
+                        DoCast(me, SPELL_LOVE_COSMETIC);
+                        female->AI()->DoCast(female, SPELL_LOVE_COSMETIC);
+                        player->GroupEventHappens(QUEST_THE_WAY_TO_HIS_HEART, me);
+                        me->DespawnOrUnsummon(5000);
+                    }
+                }
+            }
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_attracted_reef_bullAI(creature);
+        }
+};
+
+class spell_anuniaqs_net : public SpellScriptLoader
+{
+public:
+    spell_anuniaqs_net() : SpellScriptLoader("spell_anuniaqs_net") {}
+
+    class spell_anuniaqs_net_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_anuniaqs_net_SpellScript);
+
+        bool Validate(SpellInfo const* /*spellInfo*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_ANUNIAQS_NET))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* caster = GetCaster())
+                if (caster->ToPlayer())
+                    caster->ToPlayer()->AddItem(ITEM_TASTY_REEF_FISH, urand(1,5));
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_anuniaqs_net_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_anuniaqs_net_SpellScript();
+    }
+};
+
 void AddSC_howling_fjord()
 {
     new npc_apothecary_hanes;
@@ -437,4 +540,6 @@ void AddSC_howling_fjord()
     new npc_razael_and_lyana;
     new npc_mcgoyver;
     new npc_daegarn;
+	new npc_attracted_reef_bull();
+    new spell_anuniaqs_net();
  }
