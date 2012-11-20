@@ -72,8 +72,5 @@ include(cmake/showoptions.cmake)
 # add dependencies
 add_subdirectory(dep)
 
-# add dependencies
-add_subdirectory(tools)
-
 # add core sources
 add_subdirectory(src)

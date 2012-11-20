@@ -1216,19 +1216,19 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
 
     // Call ScriptMgr if we're reloading the configuration
-    m_bool_configs[CONFIG_WINTERGRASP_ENABLE] = ConfigMgr::GetBoolDefault("Wintergrasp.Enable", false);
-    m_int_configs[CONFIG_WINTERGRASP_PLR_MAX] = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMax", 100);
-    m_int_configs[CONFIG_WINTERGRASP_PLR_MIN] = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMin", 0);
-    m_int_configs[CONFIG_WINTERGRASP_PLR_MIN_LVL] = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMinLvl", 77);
-    m_int_configs[CONFIG_WINTERGRASP_BATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.BattleTimer", 30);
-    m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.NoBattleTimer", 150);
+    m_bool_configs[CONFIG_WINTERGRASP_ENABLE]             = ConfigMgr::GetBoolDefault("Wintergrasp.Enable", false);
+    m_int_configs[CONFIG_WINTERGRASP_PLR_MAX]             = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMax", 100);
+    m_int_configs[CONFIG_WINTERGRASP_PLR_MIN]             = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMin", 0);
+    m_int_configs[CONFIG_WINTERGRASP_PLR_MIN_LVL]         = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMinLvl", 77);
+    m_int_configs[CONFIG_WINTERGRASP_BATTLETIME]          = ConfigMgr::GetIntDefault("Wintergrasp.BattleTimer", 30);
+    m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME]        = ConfigMgr::GetIntDefault("Wintergrasp.NoBattleTimer", 150);
     m_int_configs[CONFIG_WINTERGRASP_RESTART_AFTER_CRASH] = ConfigMgr::GetIntDefault("Wintergrasp.CrashRestartTimer", 10);
 	
 	// Passive Anticheat
-    m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = sConfig->GetBoolDefault("Anticheat.Enable", true);
-    m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION] = sConfig->GetIntDefault("Anticheat.ReportsForIngameWarnings", 70);
-    m_int_configs[CONFIG_ANTICHEAT_DETECTIONS_ENABLED] = sConfig->GetIntDefault("Anticheat.DetectionsEnabled",31);
-    m_int_configs[CONFIG_ANTICHEAT_MAX_REPORTS_FOR_DAILY_REPORT] = sConfig->GetIntDefault("Anticheat.MaxReportsForDailyReport",70);
+    m_bool_configs[CONFIG_ANTICHEAT_ENABLE]                           = ConfigMgr::GetBoolDefault("Anticheat.Enable", true);
+    m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION]       = ConfigMgr::GetBoolDefault("Anticheat.ReportsForIngameWarnings", 70);
+    m_int_configs[CONFIG_ANTICHEAT_DETECTIONS_ENABLED]                = ConfigMgr::GetBoolDefault("Anticheat.DetectionsEnabled",31);
+    m_int_configs[CONFIG_ANTICHEAT_MAX_REPORTS_FOR_DAILY_REPORT]      = ConfigMgr::GetBoolDefault("Anticheat.MaxReportsForDailyReport",70);
 
     if (reload)
         sScriptMgr->OnConfigLoad(reload);

@@ -125,12 +125,8 @@ int Master::Run()
     seed1.SetRand(16 * 8);
 
     sLog->outInfo(LOG_FILTER_WORLDSERVER, "%s (worldserver)\n", _FULLVERSION);
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, "<Ctrl-C> to stop.\n");
 
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, "TERACORE 3.3.5a\n");
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, "¯|¯ |¯ |¯| /¯\ |¯ |¯| |¯| |¯ \n");
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, " |  |¯ |¯\ |¯| |_ |_| |¯\ |¯ \n");
-    sLog->outInfo(LOG_FILTER_WORLDSERVER, "     ¯                     ¯ \n");
+    sLog->outInfo(LOG_FILTER_WORLDSERVER, "    --    TERACORE 3.3.5a    --    ");
     sLog->outInfo(LOG_FILTER_WORLDSERVER, "We are Busy developing a website.\n");
 
     /// worldserver PID file creation
