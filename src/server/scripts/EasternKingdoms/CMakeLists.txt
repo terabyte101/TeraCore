@@ -64,6 +64,7 @@ set(scripts_STAT_SRCS
   EasternKingdoms/BlackrockDepths/boss_ambassador_flamelash.cpp
   EasternKingdoms/BlackrockDepths/instance_blackrock_depths.cpp
   EasternKingdoms/BlackrockDepths/boss_moira_bronzebeard.cpp
+  EasternKingdoms/BlackrockDepths/boss_coren_direbrew.cpp
   EasternKingdoms/BlackrockDepths/blackrock_depths.h
   EasternKingdoms/BlackrockDepths/boss_emperor_dagran_thaurissan.cpp
   EasternKingdoms/BlackrockDepths/boss_magmus.cpp
