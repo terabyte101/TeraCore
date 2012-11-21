@@ -2719,6 +2719,191 @@ DuelResetCooldown = 1
 ###################################################################################################
 
 ###################################################################################################
+# PLAYERBOT CONFIGURATION
+#
+#    Bot.EnablePlayerBots
+#        Disable the bot command and bot menu
+#        Default: 1 - enable
+#                       0 - disable
+
+Bot.EnablePlayerBots = 1
+
+#    Bot.FollowDistanceMin
+#    Bot.FollowDistanceMax
+#        Min. and max. follow distance for bots
+#        Default: 0.5 / 2.0
+
+Bot.FollowDistanceMin = 0.5
+Bot.FollowDistanceMax = 1.0
+
+#    Bot.DebugWhisper
+#        Enable debug output by whispering master
+#        Default: 0 - off
+#                 1 - on
+
+Bot.DebugWhisper = 0
+
+#    Bot.MaxPlayerbots
+#        Limits the number of bots per account (Max 9)
+#        Default: 9
+
+Bot.MaxPlayerBots = 9
+
+#    Bot.MaxLevelDiff
+#        Maximum level difference between summoner and bot
+#        Default: 79
+
+Bot.MaxLevelDiff = 79
+
+#    Bot.Collect.Combat
+#    Bot.Collect.Quest
+#    Bot.Collect.Profession
+#    Bot.Collect.Loot
+#    Bot.Collect.Skin
+#    Bot.Collect.Objects
+#        Enable collection options for after combat, quest items, profession, all loot, skin, or nearby objects
+#                 0 - off
+#        Default: 1 - on
+
+Bot.Collect.Combat = 1
+Bot.Collect.Quest = 1
+Bot.Collect.Profession = 1
+Bot.Collect.Loot = 1
+Bot.Collect.Skin = 1
+Bot.Collect.Objects = 1
+
+#    Bot.Collect.Distance
+#        Default distance that bots will search within for collection.
+#        Default: 25 (cannot be more than DistanceMax)
+#
+#    Bot.Collect.DistanceMax
+#        Maximum distance that can be configured for bots to collect objects. Allowing a higher
+#        distance could increase processor usage for object searching.
+#                 1-100
+#        Default: 30
+
+Bot.Collect.Distance = 25
+Bot.Collect.DistanceMax = 30
+
+#    Bot.SellGarbage
+#        Allow bots to automatically sell all [GRAY|POOR] quality items as the player activates vendor
+#        Default: 0 - off
+#                 1 - on
+
+Bot.SellGarbage = 0
+
+#    Bot.SellAll.LevelDiff
+#         If 'sell all' command is given prior to selling, bots will sell all low level white items.. this number is the number
+#         of levels LOWER than the bots level the Item must be before bot will sell it.
+#         Default: 10 (10 levels lower than the bot) Don't set to 0 or they'll sell everything! *SellGarbage must be set to 1 to use this*
+
+Bot.SellAll.LevelDiff = 10
+
+#    Bot.LootMethod
+#        Type of loot method
+#        Default: 2
+#        0 = Free for all
+#        1 = Round robin
+#        2 = Master loot
+#        3 = Group loot
+#        4 = Need before greed
+
+Bot.LootMethod = 2
+
+#    Bot.ChangeFaction
+#        Change bot's faction on login (thy will restore their faction of logout)
+#        Default = 1
+#        0 = false - Do not change
+#        1 = true - Bot and his npcbots will change their faction to master's
+
+Bot.ChangeFaction = 1
+
+#
+###################################################################################################
+
+###################################################################################################
+# NPCBOT CONFIGURATION
+#
+#     Bot.EnableNpcBots
+#        Enable NpcBot system
+#        Default: 1 - enable
+#                       0 - disable
+
+Bot.EnableNpcBots = 1
+
+#    Bot.MaxNpcBots
+#        Maximum number of Npc Bots allowed per character (disabled for GM accounts)
+#        Default: 1
+#        Recomended: 4
+#        Max: 9
+#        Absolute Max: 39
+
+Bot.MaxNpcBots = 1
+
+#    Bot.MaxNpcBotsPerClass
+#        Maximum Npc Bots of each class allowed per character
+#        If set to 0, no restriction
+#        Default: 1
+
+Bot.MaxNpcBotsPerClass = 1
+
+#    Bot.BaseFollowDistance
+#        Default follow distance set at login
+#        Default: 30
+
+Bot.BaseFollowDistance = 30
+
+#    Bot.XpReductionPercent
+#        Since bot party can be pretty large, it can become an exploit to farm xp so you can reduce xp gain here
+#        PERCENT of  'XP.KILL'  reward reduction from each Npc Bots used (Starting with second)
+#        Example:
+#            You have 3 bots, xp reduction is 20 then reduction will be ((3-1)*20) = 40%; 60% exp gained only
+#        Note: Minimum xp rate will be 10%
+#        Min: 0
+#        Max: 90
+#        Default: 0
+
+Bot.XpReductionPercent = 0
+
+#    Bot.HealTargetIconsMask
+#        Icon number bitmask which bots are using to search for additional targets to heal (out of party)
+#        1 - Star
+#        2 - Circle
+#        4 - Diamond
+#        8 - Triangle
+#        16 - Moon
+#        32 - Square
+#        64 - Cross
+#        128 - Skull
+#        Example: to check Star, Triangle and Square we need 1+8+32 = 41
+#        Note that many creatures cannot accept heal
+#        Min: 0 (Disable)
+#        Max: 255 (Any Icon)
+#        Default: 8 (Triangle)
+
+Bot.HealTargetIconsMask = 8
+
+#    Bot.DamageMult
+#        Myltiplier for bot's damage dealt. Allows to balance bots' compared to players' damage
+#        Any damage done by bots will be modified
+#        Range: 0.01 - 10.0
+#        Default: 1.0
+
+Bot.DamageMult.Melee = 1.0
+Bot.DamageMult.Spell = 1.0
+
+#    Bot.AllowAllClasses
+#        If set to 0 will not allow to create bots (through command) with classes which not yet implemented (in development)
+#        and not shown in botgiver's dialog
+#        Warning: Enabling this can cause crashes!
+#        Default: 0
+
+Bot.AllowAllClasses = 0
+
+#
+###################################################################################################
+
+###################################################################################################
 #
 #  LOGGING SYSTEM SETTINGS
 #
@@ -2888,4 +3073,6 @@ Logger.Opcodes=41,6,Console Server
 Loggers=Root Chat DBErrors GM RA Warden Character Load WorldServer Opcodes
 
 #
+###################################################################################################
+
 ###################################################################################################

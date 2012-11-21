@@ -46,6 +46,10 @@
 #include "LFGMgr.h"
 #include "CalendarMgr.h"
 
+// Playerbot mod
+#include "Config.h"
+#include "PlayerbotAI.h"
+
 class LoginQueryHolder : public SQLQueryHolder
 {
     private:
@@ -1000,8 +1004,101 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 
     m_playerLoading = false;
 
+    //the only place where we check if it has NPC bots
+    bool allowNBots = ConfigMgr::GetBoolDefault("Bot.EnableNpcBots", true);
+    if (allowNBots)
+    {
+        QueryResult results;
+        results = CharacterDatabase.PQuery("SELECT entry,race,class,istank FROM `character_npcbot` WHERE `owner` = '%u'", pCurrChar->GetGUIDLow());
+        if (results)
+        {
+            do
+            {
+                uint32 m_bot_entry = 0;
+                uint8 m_bot_race = 0;
+                uint8 m_bot_class = 0;
+                bool Tank = false;
+                Field* fields = results->Fetch();
+                m_bot_entry = fields[0].GetUInt32();
+                m_bot_race = fields[1].GetUInt8();
+                m_bot_class = fields[2].GetInt8();
+                Tank = fields[3].GetInt8();
+                if (m_bot_entry && m_bot_race && m_bot_class)
+                    pCurrChar->SetBotMustBeCreated(m_bot_entry, m_bot_race, m_bot_class, Tank);
+            } while (results->NextRow());
+        }
+    }
+
     sScriptMgr->OnPlayerLogin(pCurrChar);
     delete holder;
+}
+
+//Playerbot mod: is different from the normal
+//HandlePlayerLoginCallback in that it sets up the bot's
+//world session and also stores the pointer to the bot player
+//in the master's world session m_playerBots map
+void WorldSession::HandlePlayerBotLogin(SQLQueryHolder* holder)
+{
+    if (!holder) return;
+
+    LoginQueryHolder* lqh = (LoginQueryHolder*)holder;
+
+    if (!lqh || !lqh->GetAccountId()) // Probably excessively verbose..
+    {
+        //sLog->outError("Excessively verbose Playerbot error checkpoint #1 hit. Please report this error immediately.");
+        if (holder) delete holder;
+        return;
+    }
+
+    WorldSession* masterSession = sWorld->FindSession(lqh->GetAccountId());
+
+    if (!masterSession) // Probably excessively verbose..
+    {
+        //sLog->outError("Excessively verbose Playerbot error checkpoint #2 hit. Please report this error immediately.");
+        if (holder) delete holder;
+        return;
+    }
+
+    //This WorldSession is owned by the bot player object
+    //it will deleted in the Player class constructor for Playerbots
+    //only
+    WorldSession* botSession = new WorldSession(lqh->GetAccountId(), NULL, masterSession->GetSecurity(), masterSession->Expansion(), 0, masterSession->GetSessionDbcLocale(), 0, false);
+
+    if (!botSession) // Probably excessively verbose..
+    {
+        //sLog->outError("Excessively verbose Playerbot error checkpoint #3 hit. Please report this error immediately.");
+        if (holder) delete holder;
+        return;
+    }
+
+    uint64 guid = lqh->GetGuid();
+    if (!guid) // Probably excessively verbose..
+    {
+        //sLog->outError("Excessively verbose Playerbot error checkpoint #4 hit. Please report this error immediately.");
+        if (holder) delete holder;
+        if (botSession) delete botSession;
+        return;
+    }
+
+    botSession->HandlePlayerLogin(lqh);
+    Player* const botPlayer = botSession->GetPlayer();
+
+    if (!botPlayer) // Probably excessively verbose..
+    {
+        //sLog->outError("Excessively verbose Playerbot error checkpoint #5 hit. Please report this error immediately.");
+        //if (holder) delete holder; //already deleted in HandlePlayerLogin
+        if (botSession) delete botSession;
+        return;
+    }
+
+    //give the bot some AI, object is owned by the player class
+    PlayerbotAI* ai = new PlayerbotAI(masterSession->GetPlayer(), botPlayer);
+    botPlayer->SetPlayerbotAI(ai);
+
+    //tell the world session that they now manage this new bot
+    (masterSession->m_playerBots)[guid] = botPlayer;
+
+    botSession->m_master = masterSession->GetPlayer();
 }
 
 void WorldSession::HandleSetFactionAtWar(WorldPacket & recvData)
@@ -1178,6 +1275,57 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(PreparedQueryResult resu
     SendPacket(&data);
 
     sWorld->UpdateCharacterNameData(guidLow, newName);
+}
+
+//Playerbot mod - add new player bot for this master. This definition must
+//appear in this file because it utilizes the CharacterHandler class
+//which isn't accessible outside this file
+void WorldSession::AddPlayerBot(uint64 playerGuid)
+{
+    //has bot already been added?
+    if (GetPlayerBot(playerGuid) != 0) return;
+
+    ChatHandler ch = ChatHandler(this);
+
+    //check if bots are enabled
+    if (ConfigMgr::GetBoolDefault("Bot.EnablePlayerBots", true) == false)
+    {
+        ch.SendSysMessage("PlayerBot System is currently disabled. Please contact administration.");
+        return;
+    }
+    //check if max playerbots are exceeded
+    uint8 count = m_playerBots.size();//0;
+    uint8 MaxPlayerbots = ConfigMgr::GetIntDefault("Bot.MaxPlayerbots", 9);
+    if (count >= MaxPlayerbots)
+    {
+        ch.PSendSysMessage("You have reached the maximum number of Player Bots allowed (%u).", MaxPlayerbots);
+        return;
+    }
+    //check level difference
+    uint8 maxDiff = abs(ConfigMgr::GetIntDefault("Bot.MaxLevelDiff", 79));
+    uint8 diff = 0;
+    QueryResult result = CharacterDatabase.PQuery("SELECT level FROM characters WHERE guid = '%u'", GUID_LOPART(playerGuid));
+    if (result)
+    {
+        uint8 botlevel = (*result)[0].GetUInt8();
+        diff = abs(botlevel - GetPlayer()->getLevel());
+        if (diff > maxDiff)
+        {
+            const char* expr = GetPlayer()->getLevel() > botlevel ? "low" : "high";
+            ch.PSendSysMessage("This player is too %s level! (max difference: %u)", expr, maxDiff);
+            return;
+        }
+    }
+
+    LoginQueryHolder* holder = new LoginQueryHolder(GetAccountId(), playerGuid);
+
+    if (!holder->Initialize())
+    {
+        delete holder; //delete all unprocessed queries
+        return;
+    }
+    _charBotLoginCallback = CharacterDatabase.DelayQueryHolder(holder);
+    ch.PSendSysMessage("Bot added successfully.");
 }
 
 void WorldSession::HandleSetPlayerDeclinedNames(WorldPacket& recvData)

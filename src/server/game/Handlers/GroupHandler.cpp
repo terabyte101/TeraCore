@@ -306,6 +306,13 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recvData)
 
     if (grp->IsMember(guid))
     {
+        Player* player = sObjectAccessor->FindPlayer(guid);
+        if (player && player->GetPlayerbotAI())
+        {
+            if (Player* master = player->GetSession()->m_master)
+                master->GetSession()->LogoutPlayerBot(guid);
+        }
+        else
         Player::RemoveFromGroup(grp, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID(), reason.c_str());
         return;
     }
@@ -351,6 +358,13 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recvData)
 
     if (uint64 guid = grp->GetMemberGUID(membername))
     {
+        Player* player = sObjectAccessor->FindPlayer(guid);
+        if (player && player->GetPlayerbotAI())
+        {
+            if (Player* master = player->GetSession()->m_master)
+                master->GetSession()->LogoutPlayerBot(guid);
+        }
+        else
         Player::RemoveFromGroup(grp, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID());
         return;
     }

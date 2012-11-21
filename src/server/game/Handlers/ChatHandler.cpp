@@ -40,6 +40,9 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 
+//Playerbot mod
+#include "PlayerbotAI.h"
+
 void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 {
     uint32 type;
@@ -298,6 +301,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             if (!senderIsPlayer && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
                 sender->AddWhisperWhiteList(receiver->GetGUID());
 
+            //Playerbot mod: handle whispered command to bot
+            if (receiver->GetPlayerbotAI())
+            {
+                if (lang != LANG_ADDON)
+                    receiver->GetPlayerbotAI()->HandleCommand(msg, *GetPlayer());
+                GetPlayer()->m_speakTime = 0;
+                GetPlayer()->m_speakCount = 0;
+            }
+            else
+            //end Playerbot mod
             GetPlayer()->Whisper(msg, lang, receiver->GetGUID());
         } break;
         case CHAT_MSG_PARTY:
@@ -316,6 +329,24 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 return;
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
+
+
+            //Playerbot mod: broadcast message to bot members
+            for (GroupReference *itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            {
+                Player* player = itr->getSource();
+
+                if (player && player->GetPlayerbotAI() && (msg.find("help", 0) != -1))
+                {
+                    //only whispered commands should be handled
+                    //so in party chat accept only help request 
+                    player->GetPlayerbotAI()->HandleCommand(msg, *GetPlayer());//send help 
+                    GetPlayer()->m_speakTime = 0;
+                    GetPlayer()->m_speakCount = 0;
+                    break;//only once
+                }
+            }
+            //end Playerbot mod
 
             WorldPacket data;
             ChatHandler::FillMessageData(&data, this, uint8(type), lang, NULL, 0, msg.c_str(), NULL);

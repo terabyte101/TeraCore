@@ -220,12 +220,44 @@ class CharacterCreateInfo
         virtual ~CharacterCreateInfo(){};
 };
 
+//Playerbot mod
+typedef UNORDERED_MAP<uint64, Player*> PlayerBotMap;
+//npcbot
+struct NpcBotMap
+{
+    friend class Player;
+    protected:
+        NpcBotMap() : m_guid(0), m_entry(0), m_race(0), m_class(0), m_creature(NULL), m_reviveTimer(0), tank(false) {}
+        uint64 m_guid;
+        uint32 m_entry;
+        uint8  m_race;
+        uint8  m_class;
+        Creature *m_creature;
+        uint32 m_reviveTimer;
+        bool tank;
+    public:
+        uint64 _Guid() const { return m_guid; }
+        Creature *_Cre() const { return m_creature; }
+};
+#define MAX_NPCBOTS 40
+//end bot mods
+
 /// Player session in the World
 class WorldSession
 {
     public:
         WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter);
         ~WorldSession();
+
+        //Playerbot mod
+        void AddPlayerBot(uint64 guid);
+        void LogoutPlayerBot(uint64 guid);
+        Player *GetPlayerBot(uint64 guid) const;
+        PlayerBotMap m_playerBots;
+        PlayerBotMap::const_iterator GetPlayerBotsBegin() const { return m_playerBots.begin(); }
+        PlayerBotMap::const_iterator GetPlayerBotsEnd()   const { return m_playerBots.end();   }
+        Player *m_master;
+        //end Playerbot mod
 
         bool PlayerLoading() const { return m_playerLoading; }
         bool PlayerLogout() const { return m_playerLogout; }
@@ -416,6 +448,7 @@ class WorldSession
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
         void HandleCharEnum(PreparedQueryResult result);
         void HandlePlayerLogin(LoginQueryHolder * holder);
+        void HandlePlayerBotLogin(SQLQueryHolder * holder);
         void HandleCharFactionOrRaceChange(WorldPacket& recvData);
 
         // played time
@@ -938,6 +971,9 @@ class WorldSession
         QueryCallback<PreparedQueryResult, uint64> _sendStabledPetCallback;
         QueryCallback<PreparedQueryResult, CharacterCreateInfo*, true> _charCreateCallback;
         QueryResultHolderFuture _charLoginCallback;
+
+        // Playerbot
+        QueryResultHolderFuture _charBotLoginCallback;
 
     private:
         // private trade methods
