@@ -17,8 +17,11 @@ Step 4.) Log in at least once with this character.
          (Do not change the configuration before this)
 Step 5.) Tune the configuration options in the configuration file and the
          Database.
+		 
+		 
+		 NOTE ! : USE WORLDSERVER.CONF FOR THIS CONFIGERATION!
 
-#These are the settings in the configuration file:
+#These are the settings in the configuration file: WORLDSERVER.conf
 AuctionHouseBot.DEBUG = 0
 AuctionHouseBot.EnableSeller = 0
 AuctionHouseBot.EnableBuyer = 0

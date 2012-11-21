@@ -1276,6 +1276,7 @@ void AddBattlegroundScripts()
 /* This is where custom scripts' loading functions should be declared. */
 void AddSC_DuelReset();
 void AddSC_ArgentTournament();
+void AddSC_npc_teleport();
 //Player Bots
 void AddSC_druid_bot();
 void AddSC_hunter_bot();
@@ -1288,6 +1289,7 @@ void AddSC_warlock_bot();
 void AddSC_warrior_bot();
 void AddSC_script_bot_giver();
 void AddSC_script_bot_commands();
+
 #endif
 
 void AddCustomScripts()
@@ -1296,6 +1298,7 @@ void AddCustomScripts()
     /* This is where custom scripts should be added. */
     AddSC_DuelReset();
 	AddSC_ArgentTournament();
+	AddSC_npc_teleport();
     //Player Bots
     AddSC_druid_bot();
     AddSC_hunter_bot();
