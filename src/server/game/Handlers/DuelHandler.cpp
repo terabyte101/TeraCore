@@ -51,41 +51,6 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 
     player->SendDuelCountdown(3000);
     plTarget->SendDuelCountdown(3000);
-
-    if (player->GetZoneId() == 4395)
-    {
-       // clear CDs from players
-       player->RemoveArenaSpellCooldowns(true);
-       player->RemoveArenaAuras();
-       plTarget->RemoveArenaSpellCooldowns(true);
-       plTarget->RemoveArenaAuras();
-
-       // remove Debuffs
-       player->RemoveAura(41425); // Remove Hypothermia Debuff
-       plTarget->RemoveAura(41425);
-       player->RemoveAura(25771); // Remove Forbearance Debuff
-       plTarget->RemoveAura(25771);
-       player->RemoveAura(57724); // Remove Sated Debuff
-       plTarget->RemoveAura(57724);
-       player->RemoveAura(57723); // Remove Exhaustion Debuff
-       plTarget->RemoveAura(57723);
-       player->RemoveAura(31850); // Remove Ardent Defender Debuff
-       plTarget->RemoveAura(31850);
-       player->RemoveAura(11196); // Remove Recently Bandaged Debuff
-       plTarget->RemoveAura(11196);
-       // end of removing debuffs
-
-       player->SetHealth(player->GetMaxHealth());
-       plTarget->SetHealth(plTarget->GetMaxHealth());
-       player->SetPower(POWER_MANA, player->GetMaxPower(POWER_MANA));
-       plTarget->SetPower(POWER_MANA,  plTarget->GetMaxPower(POWER_MANA));
-       player->SetPower(POWER_RAGE, 0);
-       plTarget->SetPower(POWER_RAGE, 0);
-       player->SetPower(POWER_RUNIC_POWER, 0);
-       plTarget->SetPower(POWER_RUNIC_POWER, 0);
-       // end of CDs clearing
-   }
-
 }
 
 void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
