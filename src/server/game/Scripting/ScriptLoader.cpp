@@ -1273,6 +1273,7 @@ void AddBattlegroundScripts()
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
 void AddSC_DuelReset();
+void AddSC_ArgentTournament();
 
 #endif
 
@@ -1281,6 +1282,7 @@ void AddCustomScripts()
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
     AddSC_DuelReset();
+	AddSC_ArgentTournament();
 
 #endif
 }
