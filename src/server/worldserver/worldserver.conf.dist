@@ -2662,7 +2662,12 @@ PlayerDump.DisallowPaths = 1
 PlayerDump.DisallowOverwrite = 1
 
 #
+###################################################################################################
 
+###################################################################################################
+#
+#  PASSIVE ANTICHEAT SETTINGS
+#
 #     Anticheat.Enable
 #        Description: Enables or disables the Anticheat System functionality
 #        Default:     1 - (Enabled)
@@ -2695,7 +2700,22 @@ Anticheat.DetectionsEnabled = 31
 #        Default:     70
 
 Anticheat.MaxReportsForDailyReport = 70
+#
+###################################################################################################
 
+###################################################################################################
+#
+#  DUEL RESET SETTINGS
+#
+#  DuelResetCooldown
+#  Reseting spell cooldowns and restore health and mana with end duel
+#  Default: 1 - Enable
+#           0 - Disable
+#
+
+DuelResetCooldown = 1
+
+#
 ###################################################################################################
 
 ###################################################################################################

@@ -168,6 +168,8 @@ enum WorldBoolConfigs
     CONFIG_WARDEN_ENABLED,
     CONFIG_WINTERGRASP_ENABLE,
     BOOL_CONFIG_VALUE_COUNT
+	//Duel Reset script
+	CONFIG_DUEL_RESET_COOLDOWN,
 };
 
 enum WorldFloatConfigs
